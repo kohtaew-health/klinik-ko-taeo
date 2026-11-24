@@ -671,6 +671,33 @@
         let selectedDateStr = ""; // รูปแบบ YYYY-MM-DD
         let selectedTimeStr = "";
         let bookedSlotsCache = {}; // เก็บข้อมูลคิวที่ถูกจองแล้ว
+        // วันหยุดราชการไทยปี 2569 (พ.ศ. 2569) สำรองไว้ครบทั้งปี
+        // ใช้ร่วมกับข้อมูลปฏิทินวันหยุดประเทศไทยจาก Google และวันหยุดที่หน่วยงานเพิ่มเอง
+        let holidayDates = {
+            "2026-01-01": "วันขึ้นปีใหม่",
+            "2026-01-02": "วันหยุดราชการเพิ่มเป็นกรณีพิเศษ",
+            "2026-03-03": "วันมาฆบูชา",
+            "2026-04-06": "วันจักรี",
+            "2026-04-13": "วันสงกรานต์",
+            "2026-04-14": "วันสงกรานต์",
+            "2026-04-15": "วันสงกรานต์",
+            "2026-05-04": "วันฉัตรมงคล",
+            "2026-05-13": "วันพระราชพิธีพืชมงคลจรดพระนังคัลแรกนาขวัญ (หยุดราชการ)",
+            "2026-06-01": "วันหยุดชดเชยวันวิสาขบูชา",
+            "2026-06-03": "วันเฉลิมพระชนมพรรษาสมเด็จพระนางเจ้าฯ พระบรมราชินี",
+            "2026-07-28": "วันเฉลิมพระชนมพรรษาพระบาทสมเด็จพระเจ้าอยู่หัว",
+            "2026-07-29": "วันอาสาฬหบูชา",
+            "2026-07-30": "วันเข้าพรรษา (หยุดราชการ)",
+            "2026-08-12": "วันแม่แห่งชาติ",
+            "2026-10-13": "วันนวมินทรมหาราช",
+            "2026-10-16": "วันหยุดราชการเพิ่มเติมเป็นกรณีพิเศษ",
+            "2026-10-23": "วันปิยมหาราช",
+            "2026-12-05": "วันชาติและวันพ่อแห่งชาติ",
+            "2026-12-07": "วันหยุดชดเชยวันชาติและวันพ่อแห่งชาติ",
+            "2026-12-10": "วันรัฐธรรมนูญ",
+            "2026-12-31": "วันสิ้นปี"
+        };
+        let holidayMonthsLoaded = {}; // เดือนที่โหลดข้อมูลวันหยุดแล้ว
         let lastBookedProfile = null; // เก็บข้อมูลผู้จองล่าสุดไว้สำหรับปุ่ม "จองคิวซ้ำ"
         let activeRescheduleTarget = null; // เก็บข้อมูลรายการคิวที่กำลังกดเลื่อนนัด
 
@@ -680,19 +707,21 @@
         ];
 
         // เริ่มต้นทำงานเมื่อโหลดหน้าเว็บ
-        window.onload = function() {
-            // เลือกวันทำการถัดไปเป็นค่าเริ่มต้น
+        window.onload = async function() {
+            // โหลดวันหยุดก่อน เพื่อไม่ตั้งวันเริ่มต้นเป็นวันหยุดราชการ/วันหยุดชดเชย
             let initDate = new Date();
-            if (initDate.getHours() >= 14) {
+            if (initDate.getHours() >= 14) initDate.setDate(initDate.getDate() + 1);
+            await loadHolidayDatesForMonth(initDate.getFullYear(), initDate.getMonth());
+
+            while (initDate.getDay() === 0 || initDate.getDay() === 6 || isThaiHolidayClient(formatDateISO(initDate))) {
                 initDate.setDate(initDate.getDate() + 1);
+                await loadHolidayDatesForMonth(initDate.getFullYear(), initDate.getMonth());
             }
-            while (initDate.getDay() === 0 || initDate.getDay() === 6) {
-                initDate.setDate(initDate.getDate() + 1);
-            }
+
             viewMonth = initDate.getMonth();
             viewYear = initDate.getFullYear();
             selectedDateStr = formatDateISO(initDate);
-            
+
             renderCalendar();
             loadBookedSlotsAndRenderTimes(selectedDateStr);
             calculateEstimatedPrice();
@@ -784,6 +813,34 @@
             }
         }
 
+        // โหลดวันหยุดรายเดือนจากระบบหลังบ้าน (ปฏิทินวันหยุดประเทศไทย + ชีตวันหยุดหน่วยงาน)
+        async function loadHolidayDatesForMonth(year, monthIndex) {
+            const monthKey = `${year}-${String(monthIndex + 1).padStart(2, '0')}`;
+            if (holidayMonthsLoaded[monthKey]) return;
+            if (!SCRIPT_URL || SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT")) {
+                holidayMonthsLoaded[monthKey] = true;
+                return;
+            }
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=getHolidays&month=${monthKey}`);
+                const data = await response.json();
+                if (data.status === "success") {
+                    holidayDates = { ...holidayDates, ...(data.holidays || {}) };
+                    holidayMonthsLoaded[monthKey] = true;
+                }
+            } catch (err) {
+                console.warn("ไม่สามารถโหลดข้อมูลวันหยุดได้:", err);
+            }
+        }
+
+        function isThaiHolidayClient(dateIso) {
+            return Boolean(holidayDates[dateIso]);
+        }
+
+        function isWeekendClient(dateObj) {
+            return dateObj.getDay() === 0 || dateObj.getDay() === 6;
+        }
+
         // สร้างปฏิทินรายเดือน
         function renderCalendar() {
             const monthYearLabel = document.getElementById('calendar-month-year');
@@ -811,12 +868,13 @@
                 
                 const isPast = dateObj < today;
                 const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
-                const isDisabled = isPast || isWeekend;
+                const isHoliday = isThaiHolidayClient(dateIso);
+                const isDisabled = isPast || isWeekend || isHoliday;
                 const isSelected = (dateIso === selectedDateStr);
 
                 let btnClass = "w-9 h-9 mx-auto rounded-full flex items-center justify-center text-sm transition ";
                 
-                if (isSelected) {
+                if (isSelected && !isDisabled) {
                     btnClass += "bg-fbBlue text-white font-bold shadow-md shadow-blue-500/30";
                 } else if (isDisabled) {
                     btnClass += "text-slate-300 line-through cursor-not-allowed";
@@ -829,7 +887,7 @@
             }
         }
 
-        function changeMonth(delta) {
+        async function changeMonth(delta) {
             viewMonth += delta;
             if (viewMonth > 11) {
                 viewMonth = 0;
@@ -838,10 +896,21 @@
                 viewMonth = 11;
                 viewYear--;
             }
+            await loadHolidayDatesForMonth(viewYear, viewMonth);
             renderCalendar();
         }
 
-        function selectDate(dateIso) {
+        async function selectDate(dateIso) {
+            const [year, month, day] = dateIso.split("-").map(Number);
+            const pickedDate = new Date(year, month - 1, day);
+            await loadHolidayDatesForMonth(year, month - 1);
+            if (isWeekendClient(pickedDate) || isThaiHolidayClient(dateIso)) {
+                showAlert("งดให้บริการในวันที่เลือก", isThaiHolidayClient(dateIso)
+                    ? `วันที่เลือกเป็นวันหยุด${holidayDates[dateIso] ? " (" + holidayDates[dateIso] + ")" : ""} คลินิกงดให้บริการ กรุณาเลือกวันทำการอื่น`
+                    : "คลินิกงดให้บริการวันเสาร์-อาทิตย์ กรุณาเลือกวันจันทร์-ศุกร์");
+                renderCalendar();
+                return;
+            }
             selectedDateStr = dateIso;
             renderCalendar();
             loadBookedSlotsAndRenderTimes(dateIso);
@@ -849,8 +918,16 @@
 
         // ดึงข้อมูลคิวที่ถูกจองแล้วจาก Google Sheets
         async function loadBookedSlotsAndRenderTimes(dateIso) {
+            const [dateYear, dateMonth, dateDay] = dateIso.split("-").map(Number);
+            await loadHolidayDatesForMonth(dateYear, dateMonth - 1);
             const label = document.getElementById('selected-date-label');
             label.textContent = formatThaiDateFull(dateIso);
+            const selectedDateObj = new Date(dateYear, dateMonth - 1, dateDay);
+            if (isWeekendClient(selectedDateObj) || isThaiHolidayClient(dateIso)) {
+                document.getElementById('loading-slots').classList.add('hidden');
+                document.getElementById('time-slots-grid').innerHTML = `<div class="col-span-2 rounded-xl border border-amber-200 bg-amber-50 p-4 text-center text-xs text-amber-800"><i class="fa-solid fa-calendar-xmark mr-1"></i>${isThaiHolidayClient(dateIso) ? `งดให้บริการเนื่องจาก${holidayDates[dateIso] || "เป็นวันหยุดราชการไทย"}` : "งดให้บริการวันเสาร์-อาทิตย์"} กรุณาเลือกวันทำการอื่น</div>`;
+                return;
+            }
 
             const loading = document.getElementById('loading-slots');
             const grid = document.getElementById('time-slots-grid');
@@ -867,6 +944,13 @@
                     const data = await response.json();
                     if (data.status === "success") {
                         bookedCounts = data.bookedCounts || {};
+                        if (data.isHoliday && data.holidayName) holidayDates[dateIso] = data.holidayName;
+                        if (data.isHoliday || data.isWeekend) {
+                            renderCalendar();
+                            grid.innerHTML = `<div class="col-span-2 rounded-xl border border-amber-200 bg-amber-50 p-4 text-center text-xs text-amber-800"><i class="fa-solid fa-calendar-xmark mr-1"></i>งดให้บริการ${data.holidayName ? "เนื่องจาก" + data.holidayName : "ในวันเสาร์-อาทิตย์"} กรุณาเลือกวันทำการอื่น</div>`;
+                            loading.classList.add('hidden');
+                            return;
+                        }
                     }
                 } catch (err) {
                     console.warn("ไม่สามารถเชื่อมต่อ Google Sheets ชั่วคราว ใช้ข้อมูลจำลองแทน:", err);
@@ -936,6 +1020,18 @@
         async function submitBooking(e) {
             e.preventDefault();
             
+            const [bookingYear, bookingMonth, bookingDay] = selectedDateStr.split("-").map(Number);
+            await loadHolidayDatesForMonth(bookingYear, bookingMonth - 1);
+            const bookingDateObj = new Date(bookingYear, bookingMonth - 1, bookingDay);
+            if (isWeekendClient(bookingDateObj) || isThaiHolidayClient(selectedDateStr)) {
+                showAlert("ไม่สามารถจองคิวได้", isThaiHolidayClient(selectedDateStr)
+                    ? `วันที่เลือกเป็นวันหยุด${holidayDates[selectedDateStr] ? " (" + holidayDates[selectedDateStr] + ")" : ""} คลินิกงดให้บริการ กรุณาเลือกวันทำการอื่น`
+                    : "คลินิกงดให้บริการวันเสาร์-อาทิตย์ กรุณาเลือกวันจันทร์-ศุกร์");
+                navigateTo('booking');
+                renderCalendar();
+                return;
+            }
+
             const isRescheduling = Boolean(activeRescheduleTarget && activeRescheduleTarget.bookingId);
             const btnSubmit = document.getElementById('btn-submit');
             const originalBtnHtml = btnSubmit.innerHTML;
