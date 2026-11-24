@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>คลินิกการแพทย์แผนไทย รพ.สต.เกาะแต้ว</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Prompt & Sarabun สำหรับภาษาไทยที่อ่านง่าย สบายตา -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Prompt', 'Sarabun', 'sans-serif'],
+                    },
+                    colors: {
+                        thaiGreen: {
+                            50: '#f2f9f5',
+                            100: '#e0f2e7',
+                            200: '#c2e5d1',
+                            500: '#1b7a4e',
+                            600: '#14613e',
+                            700: '#0f4d31',
+                            800: '#0b3b25',
+                            900: '#07291a',
+                        },
+                        thaiGold: {
+                            50: '#fdfaf0',
+                            100: '#fbf2d5',
+                            400: '#e5b842',
+                            500: '#d4a024',
+                            600: '#b38216',
+                        },
+                        thaiCream: '#faf8f5',
+                        fbBlue: '#1877F2',
+                        fbBlueHover: '#166FE5'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #ebe8e1; /* พื้นหลังโทนอบอุ่นสบายตา */
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* ลวดลายกราฟิกไทยมินิมอล (Thai Lattice Pattern) */
+        .thai-pattern {
+            background-color: #0f4d31;
+            background-image: radial-gradient(rgba(229, 184, 66, 0.22) 1.5px, transparent 1.5px), radial-gradient(rgba(229, 184, 66, 0.15) 1.5px, #0f4d31 1.5px);
+            background-size: 28px 28px;
+            background-position: 0 0, 14px 14px;
+        }
+        /* กรอบขอบทองสไตล์ไทยร่วมสมัย */
+        .gold-border-subtle {
+            border: 1px solid rgba(212, 160, 36, 0.35);
+        }
+        /* ซ่อน Scrollbar แนวนอนแต่ยังเลื่อนได้ */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* แอนิเมชันเปลี่ยนหน้า */
+        .fade-in {
+            animation: fadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased pb-28 md:pb-12">
+
+    <!-- กรอบหลัก Responsive: เต็มจอบนมือถือ และขยายเต็มตาแบบ 2 คอลัมน์บนคอมพิวเตอร์ (max-w-5xl) -->
+    <div class="max-w-md md:max-w-5xl mx-auto bg-thaiCream min-h-screen shadow-2xl relative overflow-x-hidden border-x border-amber-900/10 md:my-6 md:min-h-0 md:rounded-3xl md:border">
+
+        <!-- ================= แถบด้านบน (Top App Bar สไตล์คลินิกแพทย์แผนไทย) ================= -->
+        <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-amber-900/10 px-4 md:px-8 py-2.5 md:py-3.5 flex items-center justify-between shadow-2xs md:rounded-t-3xl">
+            <div class="flex items-center gap-2.5 md:gap-3.5">
+                <button id="btn-back" onclick="navigateTo('home')" class="hidden w-9 h-9 md:w-10 md:h-10 rounded-full bg-thaiGreen-50 hover:bg-thaiGreen-100 flex items-center justify-center text-thaiGreen-700 transition">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <!-- โลโก้ รพ.สต.เกาะแต้ว ขนาดเล็กบน Header -->
+                <div class="w-10 h-10 md:w-12 md:h-12 aspect-square rounded-full bg-white border border-slate-200 p-0.5 shadow-2xs shrink-0 flex items-center justify-center overflow-hidden">
+                    <img src="logo.jpg" alt="โลโก้ รพ.สต.เกาะแต้ว" class="w-full h-full object-contain rounded-full">
+                </div>
+                <div>
+                    <h1 class="font-bold text-sm md:text-lg text-thaiGreen-800 leading-tight">คลินิกการแพทย์แผนไทย</h1>
+                    <p class="text-[11px] md:text-xs text-slate-500">รพ.สต.เกาะแต้ว สังกัด อบจ.สงขลา</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="navigateTo('booking')" class="hidden md:flex text-xs font-semibold bg-fbBlue hover:bg-fbBlueHover text-white px-4 py-2 rounded-full transition items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-calendar-plus"></i>
+                    <span>จองคิวรับบริการ</span>
+                </button>
+                <button onclick="openCheckQueueModal()" class="text-xs md:text-sm font-medium bg-thaiGreen-50 hover:bg-thaiGreen-100 text-thaiGreen-800 border border-thaiGreen-200 px-3 md:px-4 py-1.5 md:py-2 rounded-full transition flex items-center gap-1.5 shadow-2xs">
+                    <i class="fa-regular fa-calendar-check text-thaiGreen-600"></i>
+                    <span>เช็กคิว / เลื่อนนัด</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- ================= VIEW 1: หน้าแรก (HOME - รองรับทั้งมือถือและจอคอม 2 คอลัมน์) ================= -->
+        <main id="view-home" class="fade-in">
+            <!-- Cover Photo & Profile สไตล์เพจ Facebook ผสานลวดลายไทย -->
+            <div class="relative bg-white pb-5 md:pb-6 shadow-2xs">
+                <!-- ภาพปกไล่เฉดสีเขียวสมุนไพรและลายไทยสีทอง -->
+                <div class="h-40 md:h-52 thai-pattern relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-t from-thaiGreen-900/90 via-thaiGreen-800/40 to-transparent"></div>
+                    <!-- ลายเส้นใบไม้ประดับมุมขวา -->
+                    <div class="absolute -right-6 -bottom-6 md:right-6 md:-bottom-4 text-thaiGold-400/20 text-9xl md:text-[11rem] rotate-12 pointer-events-none">
+                        <i class="fa-solid fa-spa"></i>
+                    </div>
+                    <div class="relative z-10 p-4 pt-5 md:p-8 md:pt-9 text-white max-w-2xl">
+                        <span class="inline-flex items-center gap-1.5 bg-thaiGold-500/20 border border-thaiGold-400/40 backdrop-blur-xs text-thaiGold-100 text-[11px] md:text-xs font-medium px-3 py-0.5 md:py-1 rounded-full mb-1.5 md:mb-2">
+                            <i class="fa-solid fa-award text-thaiGold-400"></i> องค์การบริหารส่วนจังหวัดสงขลา
+                        </span>
+                        <h2 class="text-lg md:text-2xl font-bold tracking-wide drop-shadow-sm leading-snug">
+                            สืบสานศาสตร์แพทย์แผนไทย<br>
+                            <span class="text-thaiGold-400 font-medium text-sm md:text-lg">ฟื้นฟูสุขภาพด้วยสมุนไพรและหัตถเวช</span>
+                        </h2>
+                    </div>
+                </div>
+
+                <!-- ตราประจำ รพ.สต.เกาะแต้ว และส่วนหัวข้อมูลคลินิก -->
+                <div class="px-4 md:px-8">
+                    <div class="relative flex flex-col md:flex-row md:items-end md:justify-between -mt-12 md:-mt-14 mb-4 z-20 gap-3">
+                        <div class="flex items-end justify-between md:justify-start gap-4">
+                            <div class="w-24 h-24 md:w-28 md:h-28 aspect-square rounded-full bg-white p-1 shadow-lg ring-2 ring-thaiGold-400/50 flex items-center justify-center overflow-hidden shrink-0">
+                                <img src="logo.jpg" alt="ตราประจำโรงพยาบาลส่งเสริมสุขภาพตำบลเกาะแต้ว" class="w-full h-full object-contain rounded-full bg-white">
+                            </div>
+
+                            <!-- ชื่อคลินิกแสดงข้างโลโก้บนจอคอมพิวเตอร์ -->
+                            <div class="hidden md:block pb-1">
+                                <div class="flex items-center gap-2">
+                                    <h2 class="text-2xl font-bold text-slate-900">คลินิกการแพทย์แผนไทย</h2>
+                                    <i class="fa-solid fa-circle-check text-fbBlue text-base" title="หน่วยงานราชการ"></i>
+                                </div>
+                                <p class="text-sm font-medium text-thaiGreen-700 mt-0.5">โรงพยาบาลส่งเสริมสุขภาพตำบลเกาะแต้ว • สังกัด อบจ.สงขลา</p>
+                            </div>
+
+                            <!-- ปุ่มโทรและ Facebook บนมือถือ -->
+                            <div class="flex md:hidden gap-2 pb-1">
+                                <a href="tel:0824078652" class="w-10 h-10 rounded-full bg-thaiGreen-50 hover:bg-thaiGreen-100 border border-thaiGreen-200 text-thaiGreen-700 flex items-center justify-center transition shadow-2xs" title="โทรสอบถาม 082-407-8652">
+                                    <i class="fa-solid fa-phone"></i>
+                                </a>
+                                <a href="https://www.facebook.com/search/top?q=%E0%B8%A3%E0%B8%9E%E0%B8%AA%E0%B8%95.%E0%B9%80%E0%B8%81%E0%B8%B2%E0%B8%B0%E0%B9%81%E0%B8%95%E0%B9%89%E0%B8%A7" target="_blank" class="w-10 h-10 rounded-full bg-blue-50 hover:bg-blue-100 border border-blue-200 text-fbBlue flex items-center justify-center transition shadow-2xs" title="เพจ Facebook รพ.สต.เกาะแต้ว">
+                                    <i class="fa-brands fa-facebook text-lg"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- ปุ่มโทรและ Facebook บนคอมพิวเตอร์ -->
+                        <div class="hidden md:flex items-center gap-2.5 pb-1">
+                            <a href="tel:0824078652" class="px-4 py-2 rounded-full bg-thaiGreen-50 hover:bg-thaiGreen-100 border border-thaiGreen-200 text-thaiGreen-800 text-xs font-semibold flex items-center gap-2 transition shadow-2xs">
+                                <i class="fa-solid fa-phone text-thaiGreen-600"></i> 082-407-8652
+                            </a>
+                            <a href="https://www.facebook.com/search/top?q=%E0%B8%A3%E0%B8%9E%E0%B8%AA%E0%B8%95.%E0%B9%80%E0%B8%81%E0%B8%B2%E0%B8%B0%E0%B9%81%E0%B8%95%E0%B9%89%E0%B8%A7" target="_blank" class="px-4 py-2 rounded-full bg-blue-50 hover:bg-blue-100 border border-blue-200 text-fbBlue text-xs font-semibold flex items-center gap-2 transition shadow-2xs">
+                                <i class="fa-brands fa-facebook text-sm"></i> เพจ รพสต.เกาะแต้ว
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- ชื่อคลินิกบนมือถือ -->
+                    <div class="mb-4 md:hidden">
+                        <div class="flex items-center gap-1.5">
+                            <h2 class="text-xl font-bold text-slate-900">คลินิกการแพทย์แผนไทย</h2>
+                            <i class="fa-solid fa-circle-check text-fbBlue text-sm" title="หน่วยงานราชการ"></i>
+                        </div>
+                        <p class="text-xs font-medium text-thaiGreen-700 mt-0.5">โรงพยาบาลส่งเสริมสุขภาพตำบลเกาะแต้ว • สังกัด อบจ.สงขลา</p>
+                    </div>
+
+                    <!-- ปุ่ม Action หลัก (เรียงตั้งบนมือถือ, เรียงคู่แนวนอนบนคอมพิวเตอร์) -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 md:gap-4 mb-4">
+                        <button onclick="navigateTo('booking')" class="w-full bg-fbBlue hover:bg-fbBlueHover active:scale-[0.99] text-white font-semibold py-3.5 px-5 rounded-xl shadow-md shadow-blue-500/25 flex items-center justify-center gap-2 transition text-base">
+                            <i class="fa-solid fa-calendar-plus text-lg"></i>
+                            <span>จองคิวรับบริการ (เลือกวัน-เวลา)</span>
+                        </button>
+                        <button onclick="quickRebookFromLast()" class="w-full bg-thaiGreen-50 hover:bg-thaiGreen-100 active:scale-[0.99] text-thaiGreen-800 border border-thaiGreen-200 font-semibold py-2.5 md:py-3.5 px-5 rounded-xl flex items-center justify-center gap-2 transition text-sm md:text-base">
+                            <i class="fa-solid fa-rotate-right text-thaiGreen-600"></i>
+                            <span>จองคิวซ้ำ (สำหรับผู้เคยจองแล้ว)</span>
+                        </button>
+                    </div>
+
+                    <!-- ป้ายเตือนสำคัญจากภาพที่ 4 -->
+                    <div class="bg-thaiGold-50 gold-border-subtle rounded-xl p-3 md:p-3.5 flex items-start md:items-center gap-2.5 text-amber-950 text-xs md:text-sm">
+                        <div class="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-thaiGold-400/20 text-thaiGold-600 flex items-center justify-center shrink-0 mt-0.5 md:mt-0">
+                            <i class="fa-solid fa-id-card"></i>
+                        </div>
+                        <div>
+                            <span class="font-bold text-thaiGreen-800">ข้อแนะนำก่อนเข้ารับบริการ:</span> อย่าลืมนำ <span class="underline font-bold text-rose-700">บัตรประชาชนตัวจริง</span> มาด้วยทุกครั้งเมื่อเข้ารับบริการ (รอบละ 60 นาที)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- เนื้อหาหลัก 2 ส่วน: แสดง 1 คอลัมน์บนมือถือ และ 2 คอลัมน์คู่กันบนคอมพิวเตอร์ -->
+            <div class="p-4 md:p-8 grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 items-start">
+                
+                <!-- คอลัมน์ซ้าย (บนจอคอมกว้าง 5/12): ข้อมูลเวลาทำการและช่องทางติดต่อ -->
+                <section class="md:col-span-5">
+                    <div class="bg-white rounded-2xl p-4 md:p-5 shadow-2xs border border-amber-900/10 space-y-3.5 text-sm">
+                        <h3 class="font-bold text-thaiGreen-800 text-base flex items-center gap-2 pb-2.5 border-b border-slate-100">
+                            <i class="fa-solid fa-hospital-user text-thaiGold-500"></i> ข้อมูลการให้บริการคลินิก
+                        </h3>
+                        <div class="flex items-center gap-3 text-slate-600">
+                            <div class="w-9 h-9 rounded-xl bg-thaiGreen-50 text-thaiGreen-600 flex items-center justify-center shrink-0 border border-thaiGreen-100">
+                                <i class="fa-regular fa-clock"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-slate-800">เปิดให้บริการทุกวัน จันทร์ - ศุกร์</p>
+                                <p class="text-xs text-slate-500">เวลา 08.30 - 15.30 น. (รอบละ 60 นาที • วันละ 4 รอบ)</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 text-slate-600">
+                            <div class="w-9 h-9 rounded-xl bg-blue-50 text-fbBlue flex items-center justify-center shrink-0 border border-blue-100">
+                                <i class="fa-solid fa-phone-volume"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-slate-800">โทร. 082-407-8652</p>
+                                <p class="text-xs text-slate-500">ติดต่อสอบถามรายละเอียดหรือแจ้งเลื่อนนัด</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 text-slate-600">
+                            <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 border border-indigo-100">
+                                <i class="fa-brands fa-facebook"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-slate-800">Facebook : รพสต.เกาะแต้ว</p>
+                                <p class="text-xs text-slate-500">ติดตามข่าวสารประชาสัมพันธ์และตารางออกหน่วย</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- คอลัมน์ขวา (บนจอคอมกว้าง 7/12): ตารางอัตราค่าบริการแยกตามสิทธิการรักษา -->
+                <section class="md:col-span-7">
+                    <div class="bg-white rounded-2xl p-4 md:p-5 shadow-2xs border border-amber-900/10">
+                        <div class="flex items-center justify-between mb-3">
+                            <div>
+                                <h3 class="font-bold text-thaiGreen-800 text-base flex items-center gap-1.5">
+                                    <i class="fa-solid fa-mortar-pestle text-thaiGold-500"></i> อัตราค่าบริการตามสิทธิ
+                                </h3>
+                                <p class="text-xs text-slate-500">หน่วย: บาท / ครั้ง</p>
+                            </div>
+                            <span class="text-[11px] md:text-xs bg-blue-600 text-white font-semibold px-3 py-1 rounded-full shadow-2xs">
+                                สิทธิ อปท. ฟรี!
+                            </span>
+                        </div>
+
+                        <!-- ตารางเลื่อนแนวนอนได้บนจอมือถือเล็ก -->
+                        <div class="overflow-x-auto rounded-xl border border-slate-200">
+                            <table class="w-full text-left border-collapse min-w-[380px]">
+                                <thead>
+                                    <tr class="text-[11px] md:text-xs font-semibold text-center">
+                                        <th class="p-2.5 bg-thaiGreen-50 text-thaiGreen-900 text-left w-2/5 border-b border-slate-200">รายการบริการ</th>
+                                        <th class="p-2 bg-amber-300 text-amber-950 border-b border-amber-400">บัตรทอง</th>
+                                        <th class="p-2 bg-emerald-600 text-white border-b border-emerald-700">ประกันสังคม</th>
+                                        <th class="p-2 bg-orange-600 text-white border-b border-orange-700 leading-tight">จ่ายตรง/<br>เบิกได้</th>
+                                        <th class="p-2 bg-blue-600 text-white border-b border-blue-700">อปท.</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 text-xs md:text-sm">
+                                    <tr class="hover:bg-thaiGreen-50/40">
+                                        <td class="p-2.5 font-medium text-slate-800 bg-slate-50/60">นวดบำบัดรักษาโรคและประคบสมุนไพร</td>
+                                        <td class="p-2 text-center font-semibold text-slate-700">100</td>
+                                        <td class="p-2 text-center font-semibold text-slate-700">250</td>
+                                        <td class="p-2 text-center font-semibold text-slate-700">250</td>
+                                        <td class="p-2 text-center font-bold text-blue-600 bg-blue-50/50">ฟรี</td>
+                                    </tr>
+                                    <tr class="hover:bg-thaiGreen-50/40">
+                                        <td class="p-2.5 font-medium text-slate-800 bg-slate-50/60">อบไอน้ำสมุนไพร</td>
+                                        <td class="p-2 text-center font-semibold text-slate-700">120</td>
+                                        <td class="p-2 text-center font-semibold text-slate-700">120</td>
+                                        <td class="p-2 text-center font-semibold text-slate-700">120</td>
+                                        <td class="p-2 text-center font-bold text-blue-600 bg-blue-50/50">ฟรี</td>
+                                    </tr>
+                                    <tr class="hover:bg-thaiGreen-50/40">
+                                        <td class="p-2.5 font-medium text-slate-800 bg-slate-50/60">เผายาสมุนไพร</td>
+                                        <td class="p-2 text-center font-semibold text-slate-700">100</td>
+                                        <td class="p-2 text-center font-semibold text-slate-700">100</td>
+                                        <td class="p-2 text-center font-semibold text-slate-700">100</td>
+                                        <td class="p-2 text-center font-bold text-blue-600 bg-blue-50/50">ฟรี</td>
+                                    </tr>
+                                    <tr class="hover:bg-thaiGreen-50/40">
+                                        <td class="p-2.5 font-medium text-slate-800 bg-slate-50/60">พอกยาสมุนไพร</td>
+                                        <td class="p-2 text-center font-semibold text-slate-700">50</td>
+                                        <td class="p-2 text-center font-semibold text-slate-700">50</td>
+                                        <td class="p-2 text-center font-semibold text-slate-700">50</td>
+                                        <td class="p-2 text-center font-bold text-blue-600 bg-blue-50/50">ฟรี</td>
+                                    </tr>
+                                    <tr class="hover:bg-thaiGreen-50/40">
+                                        <td class="p-2.5 font-medium text-slate-800 bg-slate-50/60">หัตถการหลังคลอด</td>
+                                        <td class="p-2 text-center font-semibold text-slate-700">100</td>
+                                        <td class="p-2 text-center font-semibold text-slate-700">500</td>
+                                        <td class="p-2 text-center font-semibold text-slate-700">500</td>
+                                        <td class="p-2 text-center font-bold text-blue-600 bg-blue-50/50">ฟรี</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- บริการเพิ่มเติมด้านล่าง -->
+                        <div class="mt-4 bg-thaiGreen-50/80 border border-thaiGreen-200/70 rounded-xl p-3.5">
+                            <h4 class="text-xs font-bold text-thaiGreen-800 mb-2.5 flex items-center gap-1.5">
+                                <i class="fa-solid fa-leaf text-thaiGreen-600"></i> หัตถการและบริการอื่นๆ ที่มีให้บริการ
+                            </h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700">
+                                <div class="flex items-center gap-1.5 bg-white/80 px-2.5 py-1.5 rounded-lg border border-thaiGreen-100">
+                                    <i class="fa-solid fa-spa text-thaiGreen-600 text-[11px]"></i> นวดและประคบสมุนไพร
+                                </div>
+                                <div class="flex items-center gap-1.5 bg-white/80 px-2.5 py-1.5 rounded-lg border border-thaiGreen-100">
+                                    <i class="fa-solid fa-mortar-pestle text-thaiGreen-600 text-[11px]"></i> รักษาด้วยยาสมุนไพร
+                                </div>
+                                <div class="flex items-center gap-1.5 bg-white/80 px-2.5 py-1.5 rounded-lg border border-thaiGreen-100">
+                                    <i class="fa-solid fa-person-breastfeeding text-thaiGreen-600 text-[11px]"></i> หัตถการมารดาหลังคลอด
+                                </div>
+                                <div class="flex items-center gap-1.5 bg-white/80 px-2.5 py-1.5 rounded-lg border border-thaiGreen-100">
+                                    <i class="fa-solid fa-hand-holding-medical text-thaiGreen-600 text-[11px]"></i> พอกยาสมุนไพร
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- ================= VIEW 2: หน้าเลือกวันและเวลา (ปฏิทินซ้าย + เวลาขวา บนจอคอม) ================= -->
+        <section id="view-booking" class="hidden fade-in p-4 md:p-8">
+            <div class="mb-4 md:mb-6">
+                <span class="text-xs font-semibold text-thaiGreen-600 uppercase tracking-wider">ขั้นตอนที่ 1 จาก 2</span>
+                <h2 class="text-xl md:text-2xl font-bold text-slate-900">เลือกเวลาที่ต้องการนัดหมาย</h2>
+                <p class="text-xs md:text-sm text-slate-500 mt-0.5 flex items-center gap-1.5">
+                    <i class="fa-regular fa-clock"></i> การนัดหมาย 60 นาที • เปิดเฉพาะวันจันทร์ - ศุกร์
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 items-start">
+                <!-- ปฏิทินเลือกวันที่ -->
+                <div class="bg-white border border-slate-200 rounded-2xl p-4 md:p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 id="calendar-month-year" class="font-bold text-base md:text-lg text-slate-800">พฤศจิกายน 2026</h3>
+                        <div class="flex gap-1">
+                            <button onclick="changeMonth(-1)" class="w-8 h-8 md:w-9 md:h-9 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-600">
+                                <i class="fa-solid fa-chevron-left text-xs"></i>
+                            </button>
+                            <button onclick="changeMonth(1)" class="w-8 h-8 md:w-9 md:h-9 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-600">
+                                <i class="fa-solid fa-chevron-right text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- หัวตารางวันในสัปดาห์ -->
+                    <div class="grid grid-cols-7 text-center text-xs font-medium text-slate-400 mb-2">
+                        <div class="text-rose-400">อา</div>
+                        <div>จ</div>
+                        <div>อ</div>
+                        <div>พ</div>
+                        <div>พฤ</div>
+                        <div>ศ</div>
+                        <div class="text-rose-400">ส</div>
+                    </div>
+
+                    <!-- ช่องวันที่ (Render ด้วย JS) -->
+                    <div id="calendar-days" class="grid grid-cols-7 gap-y-1.5 text-center text-sm">
+                        <!-- วันที่จะถูกสร้างที่นี่ -->
+                    </div>
+                    
+                    <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-fbBlue inline-block"></span> วันที่เลือก</span>
+                        <span>* งดให้บริการวันเสาร์-อาทิตย์ และวันหยุด</span>
+                    </div>
+                </div>
+
+                <!-- เลือกช่วงเวลา (4 รอบต่อวัน ตามภาพที่ 2: 09:00, 10:30, 13:00, 14:30 น.) -->
+                <div id="time-slots-container" class="bg-white border border-slate-200 rounded-2xl p-4 md:p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-3">
+                        <div>
+                            <h4 class="font-bold text-sm md:text-base text-slate-800">รอบเวลาว่างสำหรับวันที่</h4>
+                            <p id="selected-date-label" class="text-xs md:text-sm text-fbBlue font-semibold mt-0.5">กรุณาเลือกวันที่จากปฏิทิน</p>
+                        </div>
+                        <div id="loading-slots" class="hidden text-xs text-slate-400 flex items-center gap-1">
+                            <i class="fa-solid fa-circle-notch fa-spin"></i> กำลังเช็กคิว...
+                        </div>
+                    </div>
+
+                    <!-- หัวคอลัมน์แสดงเตียง/หมอนวด 2 ช่องคู่กันเหมือนในภาพ -->
+                    <div class="grid grid-cols-2 gap-2.5 text-center text-xs font-semibold text-slate-500 mb-2">
+                        <div class="bg-slate-50 py-1.5 rounded-lg border border-slate-100">ช่องบริการที่ 1 (เตียง 1)</div>
+                        <div class="bg-slate-50 py-1.5 rounded-lg border border-slate-100">ช่องบริการที่ 2 (เตียง 2)</div>
+                    </div>
+
+                    <div id="time-slots-grid" class="grid grid-cols-2 gap-2.5">
+                        <!-- ปุ่มเวลา 8 ช่อง (4 รอบเวลา x 2 ช่องบริการ) จะถูกสร้างด้วย JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= VIEW 3: แบบฟอร์มข้อมูลติดต่อ (จัดกึ่งกลางสวยบนคอมพิวเตอร์) ================= -->
+        <section id="view-form" class="hidden fade-in p-4 md:p-8">
+            <div class="max-w-2xl mx-auto">
+                <div class="mb-4">
+                    <span class="text-xs font-semibold text-thaiGreen-600 uppercase tracking-wider">ขั้นตอนที่ 2 จาก 2</span>
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-900">ข้อมูลติดต่อและรายละเอียดอาการ</h2>
+                </div>
+
+                <!-- สรุปวันเวลาที่เลือกด้านบน -->
+                <div class="bg-blue-50 border border-blue-200 rounded-xl p-3.5 mb-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-fbBlue text-white flex flex-col items-center justify-center shrink-0">
+                            <i class="fa-regular fa-calendar-check text-base"></i>
+                        </div>
+                        <div>
+                            <p id="summary-datetime-label" class="text-[11px] md:text-xs text-blue-700 font-medium">วันและเวลานัดหมาย</p>
+                            <p id="summary-datetime" class="text-sm md:text-base font-bold text-slate-900">-</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="navigateTo('booking')" class="text-xs md:text-sm text-fbBlue font-semibold underline px-2 py-1">
+                        เปลี่ยนเวลา
+                    </button>
+                </div>
+
+                <!-- แบนเนอร์แจ้งโหมดเลื่อนนัด (แสดงเมื่อกำลังเลื่อนนัดรายการเดิม) -->
+                <div id="reschedule-banner" class="hidden bg-amber-50 border border-amber-300 rounded-xl p-3 mb-4 text-xs md:text-sm text-amber-950 flex items-center justify-between gap-2">
+                    <div>
+                        <span class="font-bold text-amber-800"><i class="fa-solid fa-calendar-day mr-1"></i> โหมดเลื่อนนัดหมาย:</span>
+                        กำลังเลื่อนคิวรหัส <strong id="reschedule-code-label">#KT-0000</strong> ไปยังวันและเวลาใหม่
+                    </div>
+                    <button type="button" onclick="cancelRescheduleMode()" class="text-rose-600 font-semibold underline shrink-0">ยกเลิก</button>
+                </div>
+
+                <!-- ฟอร์มกรอกข้อมูล -->
+                <form id="booking-form" onsubmit="submitBooking(event)" class="bg-white p-4 md:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                        <!-- เลือกบริการที่ต้องการ -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                บริการที่ต้องการเข้ารับ <span class="text-rose-500">*</span>
+                            </label>
+                            <select id="input-service" onchange="calculateEstimatedPrice()" required class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm focus:border-fbBlue focus:ring-2 focus:ring-blue-100 outline-none">
+                                <option value="นวดบำบัดรักษาโรคและประคบสมุนไพร">นวดบำบัดรักษาโรคและประคบสมุนไพร</option>
+                                <option value="อบไอน้ำสมุนไพร">อบไอน้ำสมุนไพร</option>
+                                <option value="เผายาสมุนไพร">เผายาสมุนไพร</option>
+                                <option value="พอกยาสมุนไพร">พอกยาสมุนไพร</option>
+                                <option value="หัตถการหลังคลอด">หัตถการหลังคลอด</option>
+                            </select>
+                        </div>
+
+                        <!-- สิทธิการรักษา -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                สิทธิการรักษา <span class="text-rose-500">*</span>
+                            </label>
+                            <select id="input-right" onchange="calculateEstimatedPrice()" required class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm focus:border-fbBlue focus:ring-2 focus:ring-blue-100 outline-none">
+                                <option value="บัตรทอง">บัตรทอง (UC)</option>
+                                <option value="ประกันสังคม">ประกันสังคม</option>
+                                <option value="จ่ายตรง/เบิกได้">ข้าราชการ (จ่ายตรง/เบิกได้)</option>
+                                <option value="อปท.">สิทธิ อปท. (ฟรี)</option>
+                                <option value="ชำระเงินเอง">ชำระเงินเอง</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- แสดงค่าบริการเบื้องต้นอัตโนมัติ -->
+                    <div id="price-badge" class="text-xs md:text-sm bg-thaiGreen-50 text-thaiGreen-800 px-3.5 py-2 rounded-xl border border-thaiGreen-200 flex justify-between items-center">
+                        <span>อัตราค่าบริการโดยประมาณ:</span>
+                        <span id="estimated-price-text" class="font-bold text-sm md:text-base">100 บาท</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">ชื่อ <span class="text-rose-500">*</span></label>
+                            <input type="text" id="input-fname" required placeholder="ระบุชื่อจริง" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-fbBlue focus:ring-2 focus:ring-blue-100 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">นามสกุล <span class="text-rose-500">*</span></label>
+                            <input type="text" id="input-lname" required placeholder="ระบุนามสกุล" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-fbBlue focus:ring-2 focus:ring-blue-100 outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">หมายเลขโทรศัพท์ <span class="text-rose-500">*</span></label>
+                            <input type="tel" id="input-phone" required pattern="[0-9]{9,10}" placeholder="เช่น 0812345678" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-fbBlue focus:ring-2 focus:ring-blue-100 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">อีเมล <span class="text-slate-400 font-normal">(ถ้ามี - เพื่อรับข้อมูลยืนยัน)</span></label>
+                            <input type="email" id="input-email" placeholder="example@email.com" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-fbBlue focus:ring-2 focus:ring-blue-100 outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">บริเวณที่ปวด / อาการเบื้องต้น <span class="text-rose-500">*</span></label>
+                            <input type="text" id="input-pain" required placeholder="เช่น ปวดบ่าไหล่, ปวดหลังร้าวลงขา, ออฟฟิศซินโดรม" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-fbBlue focus:ring-2 focus:ring-blue-100 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">โรคประจำตัว / ประวัติแพ้สมุนไพร <span class="text-rose-500">*</span></label>
+                            <input type="text" id="input-disease" required placeholder="เช่น ความดัน, เบาหวาน หรือระบุว่า 'ไม่มี'" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-fbBlue focus:ring-2 focus:ring-blue-100 outline-none">
+                        </div>
+                    </div>
+
+                    <div class="pt-2">
+                        <button type="submit" id="btn-submit" class="w-full bg-fbBlue hover:bg-fbBlueHover active:scale-[0.99] text-white font-semibold py-3.5 px-4 rounded-xl shadow-lg shadow-blue-500/25 transition flex items-center justify-center gap-2 text-base">
+                            <i class="fa-solid fa-check-circle"></i>
+                            <span>ยืนยันการจองคิว</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- ================= VIEW 4: บัตรคิวอิเล็กทรอนิกส์หลังจองสำเร็จ ================= -->
+        <section id="view-success" class="hidden fade-in p-4 md:p-8">
+            <div class="max-w-lg mx-auto bg-white border border-slate-200 rounded-2xl shadow-md overflow-hidden">
+                <div class="bg-thaiGreen-600 text-white p-5 text-center">
+                    <div class="w-14 h-14 rounded-full bg-white text-thaiGreen-600 flex items-center justify-center mx-auto mb-2.5 text-2xl shadow">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <h2 class="text-xl font-bold">จองคิวสำเร็จเรียบร้อย!</h2>
+                    <p class="text-xs text-thaiGreen-100 mt-1">กรุณาบันทึกภาพหน้าจอนี้ไว้เป็นหลักฐาน</p>
+                </div>
+
+                <div class="p-5 space-y-3 text-sm">
+                    <div class="flex justify-between items-center pb-2.5 border-b border-dashed border-slate-200">
+                        <span class="text-slate-500 text-xs">รหัสการจอง (Booking ID)</span>
+                        <span id="slip-id" class="font-bold text-fbBlue text-base">#KT-0000</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">ชื่อผู้รับบริการ:</span>
+                        <span id="slip-name" class="font-semibold text-slate-900 text-right">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">วันที่นัดหมาย:</span>
+                        <span id="slip-date" class="font-semibold text-slate-900">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">เวลา:</span>
+                        <span id="slip-time" class="font-bold text-thaiGreen-700">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">บริการ:</span>
+                        <span id="slip-service" class="font-semibold text-slate-900 text-right max-w-[60%]">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">สิทธิการรักษา:</span>
+                        <span id="slip-right" class="font-semibold text-slate-900">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">อาการ/บริเวณที่ปวด:</span>
+                        <span id="slip-pain" class="font-medium text-slate-800 text-right max-w-[60%]">-</span>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 mt-4 text-xs text-amber-900">
+                        <p class="font-bold mb-1"><i class="fa-solid fa-circle-info"></i> ข้อควรปฏิบัติก่อนเข้ารับบริการ:</p>
+                        <ul class="list-disc list-inside space-y-0.5">
+                            <li>กรุณานำ <strong>บัตรประชาชนตัวจริง</strong> มาด้วยทุกครั้ง</li>
+                            <li>กรุณามาก่อนเวลานัด 10 - 15 นาที</li>
+                            <li>หากไม่สะดวกตามนัด กรุณาแจ้งล่วงหน้าที่โทร. 082-407-8652</li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-3 space-y-2">
+                        <button onclick="startRescheduleCurrentBooking()" class="w-full bg-amber-500 hover:bg-amber-600 active:scale-[0.99] text-white font-semibold py-2.5 rounded-xl shadow-sm transition text-sm flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-calendar-day"></i>
+                            <span>เลื่อนนัดหมายคิวนี้</span>
+                        </button>
+                        <button onclick="rebookCurrentUser()" class="w-full bg-fbBlue hover:bg-fbBlueHover active:scale-[0.99] text-white font-semibold py-3 rounded-xl shadow-md shadow-blue-500/20 transition text-sm flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            <span>จองคิวซ้ำ / จองวันถัดไป (ใช้ข้อมูลเดิม)</span>
+                        </button>
+                        <button onclick="navigateTo('home')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 rounded-xl transition text-sm">
+                            กลับหน้าหลัก
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= แถบปุ่มลอยด้านล่าง (แสดงเฉพาะบนมือถือ ซ่อนบนจอคอมพิวเตอร์) ================= -->
+        <div id="bottom-cta" class="md:hidden fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-md border-t border-amber-900/10 p-3 z-20 shadow-[0_-4px_15px_rgba(0,0,0,0.05)]">
+            <div class="flex items-center gap-2">
+                <button onclick="quickRebookFromLast()" class="bg-thaiGreen-50 hover:bg-thaiGreen-100 active:scale-[0.98] text-thaiGreen-800 border border-thaiGreen-200 font-semibold px-3.5 py-2.5 rounded-xl text-xs flex flex-col items-center justify-center transition shrink-0">
+                    <i class="fa-solid fa-rotate-right text-thaiGreen-600 text-sm mb-0.5"></i>
+                    <span>จองคิวซ้ำ</span>
+                </button>
+                <button onclick="navigateTo('booking')" class="flex-1 bg-fbBlue hover:bg-fbBlueHover active:scale-[0.98] text-white font-semibold px-4 py-3 rounded-xl shadow-md shadow-blue-500/25 text-sm flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-calendar-check text-base"></i>
+                    <span>กดจองคิวรับบริการ</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ================= MODAL: ตรวจสอบคิวของฉัน / จองคิวซ้ำ ================= -->
+    <div id="modal-check" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl fade-in border border-amber-900/10">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="font-bold text-base text-thaiGreen-800 flex items-center gap-1.5">
+                    <i class="fa-regular fa-calendar-check text-thaiGreen-600"></i> ตรวจสอบคิว / เลื่อนนัด / จองซ้ำ
+                </h3>
+                <button onclick="closeCheckQueueModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <p class="text-xs text-slate-500 mb-3">กรอกเบอร์โทรศัพท์ที่ใช้จองคิว เพื่อดูนัดหมาย กด <strong>"เลื่อนนัด"</strong> หรือ <strong>"จองคิวซ้ำ"</strong> โดยไม่ต้องกรอกข้อมูลใหม่</p>
+            <div class="flex gap-2 mb-3">
+                <input type="tel" id="search-phone" placeholder="กรอกเบอร์โทรศัพท์ 10 หลัก" class="flex-1 rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none focus:border-fbBlue">
+                <button onclick="searchMyBookings()" class="bg-fbBlue text-white px-4 py-2 rounded-xl text-sm font-semibold">ค้นหา</button>
+            </div>
+            <div id="search-results" class="max-h-72 overflow-y-auto space-y-2.5 text-xs">
+                <!-- ผลลัพธ์การค้นหา -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL: แจ้งเตือนทั่วไป (แทน alert()) ================= -->
+    <div id="modal-alert" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-xs w-full p-5 text-center shadow-2xl fade-in">
+            <div id="alert-icon" class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-3 text-xl">
+                <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+            <h4 id="alert-title" class="font-bold text-base text-slate-900 mb-1">แจ้งเตือน</h4>
+            <p id="alert-message" class="text-xs text-slate-600 mb-4 leading-relaxed">-</p>
+            <button onclick="closeAlert()" class="w-full bg-slate-900 text-white font-semibold py-2.5 rounded-xl text-sm">ตกลง</button>
+        </div>
+    </div>
+
+    <script>
+        // =========================================================================
+        // ⚙️ การตั้งค่าเชื่อมต่อ GOOGLE APPS SCRIPT (นำ URL Web App มาวางตรงนี้)
+        // =========================================================================
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyyeBhKAIOfQqsvmpwkoYVtudpPX7mnq0b8sWCt7UUkJT74zkPvtYzFRqxfXBD2NtSO0A/exec";
+        
+        // ตั้งค่าจำนวนคิวสูงสุดที่รับได้ต่อ 1 รอบเวลา (เปลี่ยนเป็น 2 คิว/เตียง ตามภาพตัวอย่างที่มี 2 คอลัมน์คู่กัน)
+        const MAX_SLOTS_PER_TIME = 2; 
+
+        // ช่วงเวลาให้บริการตามภาพ (4 ช่วงเวลาหลัก x 2 ช่องบริการ = 8 คิวต่อวัน)
+        const TIME_SLOTS = ["09:00 น.", "10:30 น.", "13:00 น.", "14:30 น."];
+
+        // ตารางราคาอ้างอิงจากภาพที่ 4
+        const PRICE_TABLE = {
+            "นวดบำบัดรักษาโรคและประคบสมุนไพร": { "บัตรทอง": "100 บาท", "ประกันสังคม": "250 บาท", "จ่ายตรง/เบิกได้": "250 บาท", "อปท.": "ฟรี", "ชำระเงินเอง": "250 บาท" },
+            "อบไอน้ำสมุนไพร": { "บัตรทอง": "120 บาท", "ประกันสังคม": "120 บาท", "จ่ายตรง/เบิกได้": "120 บาท", "อปท.": "ฟรี", "ชำระเงินเอง": "120 บาท" },
+            "เผายาสมุนไพร": { "บัตรทอง": "100 บาท", "ประกันสังคม": "100 บาท", "จ่ายตรง/เบิกได้": "100 บาท", "อปท.": "ฟรี", "ชำระเงินเอง": "100 บาท" },
+            "พอกยาสมุนไพร": { "บัตรทอง": "50 บาท", "ประกันสังคม": "50 บาท", "จ่ายตรง/เบิกได้": "50 บาท", "อปท.": "ฟรี", "ชำระเงินเอง": "50 บาท" },
+            "หัตถการหลังคลอด": { "บัตรทอง": "100 บาท", "ประกันสังคม": "500 บาท", "จ่ายตรง/เบิกได้": "500 บาท", "อปท.": "ฟรี", "ชำระเงินเอง": "500 บาท" }
+        };
+
+        // ตัวแปรจัดการสถานะ (State)
+        let currentDate = new Date();
+        let viewMonth = currentDate.getMonth();
+        let viewYear = currentDate.getFullYear();
+        let selectedDateStr = ""; // รูปแบบ YYYY-MM-DD
+        let selectedTimeStr = "";
+        let bookedSlotsCache = {}; // เก็บข้อมูลคิวที่ถูกจองแล้ว
+        let lastBookedProfile = null; // เก็บข้อมูลผู้จองล่าสุดไว้สำหรับปุ่ม "จองคิวซ้ำ"
+        let activeRescheduleTarget = null; // เก็บข้อมูลรายการคิวที่กำลังกดเลื่อนนัด
+
+        const THAI_MONTHS = [
+            "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+            "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+        ];
+
+        // เริ่มต้นทำงานเมื่อโหลดหน้าเว็บ
+        window.onload = function() {
+            // เลือกวันทำการถัดไปเป็นค่าเริ่มต้น
+            let initDate = new Date();
+            if (initDate.getHours() >= 14) {
+                initDate.setDate(initDate.getDate() + 1);
+            }
+            while (initDate.getDay() === 0 || initDate.getDay() === 6) {
+                initDate.setDate(initDate.getDate() + 1);
+            }
+            viewMonth = initDate.getMonth();
+            viewYear = initDate.getFullYear();
+            selectedDateStr = formatDateISO(initDate);
+            
+            renderCalendar();
+            loadBookedSlotsAndRenderTimes(selectedDateStr);
+            calculateEstimatedPrice();
+        };
+
+        // ระบบเปลี่ยนหน้า (SPA Navigation)
+        function navigateTo(viewName) {
+            const views = ['home', 'booking', 'form', 'success'];
+            views.forEach(v => {
+                document.getElementById(`view-${v}`).classList.add('hidden');
+            });
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+
+            // จัดการปุ่มย้อนกลับและแถบด้านล่าง
+            const btnBack = document.getElementById('btn-back');
+            const bottomCta = document.getElementById('bottom-cta');
+            
+            if (viewName === 'home') {
+                btnBack.classList.add('hidden');
+                bottomCta.classList.remove('hidden');
+                cancelRescheduleMode();
+            } else {
+                btnBack.classList.remove('hidden');
+                bottomCta.classList.add('hidden');
+                if (viewName === 'form') {
+                    btnBack.onclick = () => navigateTo('booking');
+                } else {
+                    btnBack.onclick = () => navigateTo('home');
+                }
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // เริ่มโหมดเลื่อนนัดอัตโนมัติจากรายการจองเดิม
+        function beginReschedule(bookingObj) {
+            if (!bookingObj || !bookingObj.bookingId) return;
+            activeRescheduleTarget = { ...bookingObj };
+
+            document.getElementById('reschedule-banner').classList.remove('hidden');
+            document.getElementById('reschedule-code-label').textContent = `#${bookingObj.bookingId}`;
+
+            // กรอกข้อมูลผู้ป่วยเดิมลงในฟอร์มให้พร้อมใช้งาน
+            document.getElementById('input-service').value = bookingObj.service || "นวดบำบัดรักษาโรคและประคบสมุนไพร";
+            document.getElementById('input-right').value = bookingObj.right || "บัตรทอง";
+            document.getElementById('input-fname').value = bookingObj.fname || "";
+            document.getElementById('input-lname').value = bookingObj.lname || "";
+            document.getElementById('input-phone').value = bookingObj.phone || "";
+            document.getElementById('input-email').value = (bookingObj.email && bookingObj.email !== "-") ? bookingObj.email : "";
+            document.getElementById('input-pain').value = bookingObj.painArea || "";
+            document.getElementById('input-disease').value = bookingObj.disease || "";
+            calculateEstimatedPrice();
+
+            // ตั้งปฏิทินไปที่วันที่นัดหมายเดิมหรือวันทำการถัดไป
+            if (bookingObj.date && /^\d{4}-\d{2}-\d{2}$/.test(bookingObj.date)) {
+                const [y, m, d] = bookingObj.date.split('-').map(Number);
+                const candidate = new Date(y, m - 1, d);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                if (candidate >= today && candidate.getDay() !== 0 && candidate.getDay() !== 6) {
+                    viewMonth = candidate.getMonth();
+                    viewYear = candidate.getFullYear();
+                    selectedDateStr = bookingObj.date;
+                }
+            }
+
+            closeCheckQueueModal();
+            renderCalendar();
+            loadBookedSlotsAndRenderTimes(selectedDateStr);
+            navigateTo('booking');
+            showAlert("เลือกวันและเวลาใหม่", `กำลังเลื่อนนัดรหัส #${bookingObj.bookingId} กรุณาเลือกวันและรอบเวลาใหม่ที่ต้องการได้เลยครับ`);
+        }
+
+        // ยกเลิกโหมดเลื่อนนัด
+        function cancelRescheduleMode() {
+            activeRescheduleTarget = null;
+            const banner = document.getElementById('reschedule-banner');
+            if (banner) banner.classList.add('hidden');
+            const label = document.getElementById('summary-datetime-label');
+            if (label) label.textContent = "วันและเวลานัดหมาย";
+        }
+
+        // เลื่อนนัดจากหน้าบัตรคิวที่เพิ่งจองสำเร็จ
+        function startRescheduleCurrentBooking() {
+            const saved = lastBookedProfile || JSON.parse(localStorage.getItem('kt_last_profile') || 'null');
+            if (saved && saved.bookingId) {
+                beginReschedule(saved);
+            } else {
+                openCheckQueueModal();
+            }
+        }
+
+        // สร้างปฏิทินรายเดือน
+        function renderCalendar() {
+            const monthYearLabel = document.getElementById('calendar-month-year');
+            monthYearLabel.textContent = `${THAI_MONTHS[viewMonth]} ${viewYear + 543}`;
+
+            const daysContainer = document.getElementById('calendar-days');
+            daysContainer.innerHTML = "";
+
+            const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+            const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            // ช่องว่างก่อนวันที่ 1
+            for (let i = 0; i < firstDay; i++) {
+                daysContainer.innerHTML += `<div></div>`;
+            }
+
+            // สร้างปุ่มวันที่ 1 - 31
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateObj = new Date(viewYear, viewMonth, day);
+                const dateIso = formatDateISO(dateObj);
+                const dayOfWeek = dateObj.getDay(); // 0 = อาทิตย์, 6 = เสาร์
+                
+                const isPast = dateObj < today;
+                const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+                const isDisabled = isPast || isWeekend;
+                const isSelected = (dateIso === selectedDateStr);
+
+                let btnClass = "w-9 h-9 mx-auto rounded-full flex items-center justify-center text-sm transition ";
+                
+                if (isSelected) {
+                    btnClass += "bg-fbBlue text-white font-bold shadow-md shadow-blue-500/30";
+                } else if (isDisabled) {
+                    btnClass += "text-slate-300 line-through cursor-not-allowed";
+                } else {
+                    btnClass += "text-slate-800 font-medium hover:bg-blue-50 hover:text-fbBlue cursor-pointer bg-slate-50";
+                }
+
+                const clickAttr = isDisabled ? "" : `onclick="selectDate('${dateIso}')"`;
+                daysContainer.innerHTML += `<button type="button" ${clickAttr} class="${btnClass}">${day}</button>`;
+            }
+        }
+
+        function changeMonth(delta) {
+            viewMonth += delta;
+            if (viewMonth > 11) {
+                viewMonth = 0;
+                viewYear++;
+            } else if (viewMonth < 0) {
+                viewMonth = 11;
+                viewYear--;
+            }
+            renderCalendar();
+        }
+
+        function selectDate(dateIso) {
+            selectedDateStr = dateIso;
+            renderCalendar();
+            loadBookedSlotsAndRenderTimes(dateIso);
+        }
+
+        // ดึงข้อมูลคิวที่ถูกจองแล้วจาก Google Sheets
+        async function loadBookedSlotsAndRenderTimes(dateIso) {
+            const label = document.getElementById('selected-date-label');
+            label.textContent = formatThaiDateFull(dateIso);
+
+            const loading = document.getElementById('loading-slots');
+            const grid = document.getElementById('time-slots-grid');
+            
+            loading.classList.remove('hidden');
+            grid.innerHTML = "";
+
+            let bookedCounts = {};
+
+            // ตรวจสอบว่าใส่ URL ของ Google Apps Script หรือยัง
+            if (SCRIPT_URL && !SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT")) {
+                try {
+                    const response = await fetch(`${SCRIPT_URL}?action=getSlots&date=${dateIso}`);
+                    const data = await response.json();
+                    if (data.status === "success") {
+                        bookedCounts = data.bookedCounts || {};
+                    }
+                } catch (err) {
+                    console.warn("ไม่สามารถเชื่อมต่อ Google Sheets ชั่วคราว ใช้ข้อมูลจำลองแทน:", err);
+                }
+            } else {
+                // โหมดทดสอบในเครื่อง (LocalStorage) กรณียังไม่ได้ใส่ SCRIPT_URL
+                const localBookings = JSON.parse(localStorage.getItem('kt_bookings') || '[]');
+                localBookings.forEach(b => {
+                    if (b.date === dateIso && b.status !== 'ยกเลิก') {
+                        bookedCounts[b.time] = (bookedCounts[b.time] || 0) + 1;
+                    }
+                });
+            }
+
+            loading.classList.add('hidden');
+
+            // สร้างปุ่มเวลาสไตล์ Google Calendar ในภาพที่ 2 (แสดง 2 คอลัมน์คู่กัน ครบทั้ง 8 ปุ่ม)
+            TIME_SLOTS.forEach(time => {
+                const count = bookedCounts[time] || 0;
+                
+                // วนลูปสร้างปุ่มซ้าย (ช่อง 1) และขวา (ช่อง 2)
+                for (let slotIndex = 1; slotIndex <= MAX_SLOTS_PER_TIME; slotIndex++) {
+                    const isBooked = count >= slotIndex;
+                    const slotLabel = `${time} (ช่อง ${slotIndex})`;
+
+                    if (isBooked) {
+                        grid.innerHTML += `
+                            <button type="button" disabled class="py-3 px-3 rounded-full border border-slate-200 bg-slate-100 text-slate-400 text-sm font-medium flex flex-col items-center justify-center cursor-not-allowed">
+                                <span class="line-through">${time}</span>
+                                <span class="text-[10px] text-rose-500 font-semibold">ช่อง ${slotIndex} เต็มแล้ว</span>
+                            </button>
+                        `;
+                    } else {
+                        grid.innerHTML += `
+                            <button type="button" onclick="selectTimeAndProceed('${time}', ${slotIndex})" class="py-3 px-3 rounded-full border-2 border-blue-200 hover:border-fbBlue hover:bg-blue-50 active:scale-[0.98] text-fbBlue font-semibold text-sm transition flex flex-col items-center justify-center shadow-2xs">
+                                <span>${time}</span>
+                                <span class="text-[10px] text-emerald-600 font-normal">ว่าง (ช่อง ${slotIndex})</span>
+                            </button>
+                        `;
+                    }
+                }
+            });
+        }
+
+        // เลือกเวลาแล้วไปหน้ากรอกฟอร์ม
+        function selectTimeAndProceed(time, slotIndex) {
+            selectedTimeStr = `${time} (ช่อง ${slotIndex})`;
+            const label = document.getElementById('summary-datetime-label');
+            if (activeRescheduleTarget) {
+                label.textContent = `วันและเวลานัดหมายใหม่ (#${activeRescheduleTarget.bookingId})`;
+            } else {
+                label.textContent = "วันและเวลานัดหมาย";
+            }
+            document.getElementById('summary-datetime').textContent = `${formatThaiDateFull(selectedDateStr)} เวลา ${selectedTimeStr}`;
+            navigateTo('form');
+        }
+
+        // คำนวณราคาเบื้องต้นตามบริการและสิทธิที่เลือก
+        function calculateEstimatedPrice() {
+            const service = document.getElementById('input-service').value;
+            const right = document.getElementById('input-right').value;
+            const price = (PRICE_TABLE[service] && PRICE_TABLE[service][right]) ? PRICE_TABLE[service][right] : "-";
+            document.getElementById('estimated-price-text').textContent = price;
+        }
+
+        // ส่งข้อมูลการจองหรือเลื่อนนัดไปยัง Google Sheets
+        async function submitBooking(e) {
+            e.preventDefault();
+            
+            const isRescheduling = Boolean(activeRescheduleTarget && activeRescheduleTarget.bookingId);
+            const btnSubmit = document.getElementById('btn-submit');
+            const originalBtnHtml = btnSubmit.innerHTML;
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> <span>${isRescheduling ? "กำลังอัปเดตวันและเวลานัดใหม่..." : "กำลังบันทึกคิวลงระบบ..."}</span>`;
+
+            const bookingData = {
+                action: isRescheduling ? "rescheduleBooking" : "createBooking",
+                bookingId: isRescheduling ? activeRescheduleTarget.bookingId : ("KT-" + Math.floor(1000 + Math.random() * 9000)),
+                rowIndex: isRescheduling ? activeRescheduleTarget.rowIndex : null,
+                date: selectedDateStr,
+                thaiDate: formatThaiDateFull(selectedDateStr),
+                time: selectedTimeStr,
+                service: document.getElementById('input-service').value,
+                right: document.getElementById('input-right').value,
+                fname: document.getElementById('input-fname').value.trim(),
+                lname: document.getElementById('input-lname').value.trim(),
+                phone: document.getElementById('input-phone').value.trim(),
+                email: document.getElementById('input-email').value.trim(),
+                painArea: document.getElementById('input-pain').value.trim(),
+                disease: document.getElementById('input-disease').value.trim()
+            };
+
+            try {
+                if (SCRIPT_URL && !SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT")) {
+                    // ส่งข้อมูลจริงไปยัง Google Apps Script
+                    const response = await fetch(SCRIPT_URL, {
+                        method: "POST",
+                        body: JSON.stringify(bookingData)
+                    });
+                    const result = await response.json();
+                    
+                    if (result.status !== "success") {
+                        throw new Error(result.message || "รอบเวลานี้ถูกจองเต็มไปแล้ว กรุณาเลือกเวลาใหม่");
+                    }
+                    bookingData.bookingId = result.bookingId || bookingData.bookingId;
+                } else {
+                    // บันทึกลง LocalStorage กรณียังไม่ได้เชื่อมต่อ Google Sheets
+                    await new Promise(r => setTimeout(r, 700));
+                    const localBookings = JSON.parse(localStorage.getItem('kt_bookings') || '[]');
+                    const baseTime = selectedTimeStr.split(' (')[0];
+                    if (isRescheduling) {
+                        const targetIdx = localBookings.findIndex(item => item.bookingId === bookingData.bookingId);
+                        const updatedRecord = { ...bookingData, time: baseTime, displayTime: selectedTimeStr, status: 'เลื่อนนัดแล้ว' };
+                        if (targetIdx !== -1) {
+                            localBookings[targetIdx] = updatedRecord;
+                        } else {
+                            localBookings.push(updatedRecord);
+                        }
+                    } else {
+                        localBookings.push({ ...bookingData, time: baseTime, displayTime: selectedTimeStr, status: 'ยืนยันแล้ว' });
+                    }
+                    localStorage.setItem('kt_bookings', JSON.stringify(localBookings));
+                }
+
+                // บันทึกข้อมูลล่าสุดลงเครื่องไว้สำหรับกด "จองคิวซ้ำ" หรือ "เลื่อนนัด" ได้ทันที
+                lastBookedProfile = { ...bookingData, status: isRescheduling ? "เลื่อนนัดแล้ว" : "ยืนยันแล้ว" };
+                localStorage.setItem('kt_last_profile', JSON.stringify(lastBookedProfile));
+                cancelRescheduleMode();
+
+                // แสดงข้อมูลในหน้าบัตรคิวสำเร็จ
+                document.getElementById('slip-id').textContent = `#${bookingData.bookingId}`;
+                document.getElementById('slip-name').textContent = `${bookingData.fname} ${bookingData.lname}`;
+                document.getElementById('slip-date').textContent = bookingData.thaiDate;
+                document.getElementById('slip-time').textContent = bookingData.time;
+                document.getElementById('slip-service').textContent = bookingData.service;
+                document.getElementById('slip-right').textContent = bookingData.right;
+                document.getElementById('slip-pain').textContent = bookingData.painArea;
+
+                document.getElementById('booking-form').reset();
+                navigateTo('success');
+
+            } catch (error) {
+                showAlert(isRescheduling ? "ไม่สามารถเลื่อนนัดได้" : "ไม่สามารถจองคิวได้", error.message);
+                loadBookedSlotsAndRenderTimes(selectedDateStr);
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = originalBtnHtml;
+            }
+        }
+
+        // ระบบจองคิวซ้ำ (กรอกข้อมูลเดิมให้อัตโนมัติ แล้วพาไปเลือกวัน-เวลาใหม่)
+        function applyProfileAndRebook(profile) {
+            if (!profile) return;
+            document.getElementById('input-service').value = profile.service || "นวดบำบัดรักษาโรคและประคบสมุนไพร";
+            document.getElementById('input-right').value = profile.right || "บัตรทอง";
+            document.getElementById('input-fname').value = profile.fname || "";
+            document.getElementById('input-lname').value = profile.lname || "";
+            document.getElementById('input-phone').value = profile.phone || "";
+            document.getElementById('input-email').value = (profile.email && profile.email !== "-") ? profile.email : "";
+            document.getElementById('input-pain').value = profile.painArea || "";
+            document.getElementById('input-disease').value = profile.disease || "";
+            
+            calculateEstimatedPrice();
+            closeCheckQueueModal();
+            navigateTo('booking');
+            showAlert("ดึงข้อมูลเดิมสำเร็จ", `ระบบกรอกข้อมูลของคุณ ${profile.fname} เรียบร้อยแล้ว กรุณาเลือกวันและเวลาที่ต้องการนัดหมายเพิ่มได้เลยครับ`);
+        }
+
+        // กดจองคิวซ้ำจากหน้าบัตรคิวสำเร็จ
+        function rebookCurrentUser() {
+            const saved = lastBookedProfile || JSON.parse(localStorage.getItem('kt_last_profile') || 'null');
+            if (saved) {
+                applyProfileAndRebook(saved);
+            } else {
+                navigateTo('booking');
+            }
+        }
+
+        // กดจองคิวซ้ำจากปุ่มด้านล่างหน้าแรก
+        function quickRebookFromLast() {
+            const saved = lastBookedProfile || JSON.parse(localStorage.getItem('kt_last_profile') || 'null');
+            if (saved) {
+                applyProfileAndRebook(saved);
+            } else {
+                // ถ้ายังไม่เคยจองในเครื่องนี้ ให้เปิดหน้าค้นหาด้วยเบอร์โทรเพื่อดึงข้อมูลจากฐานข้อมูล
+                openCheckQueueModal();
+            }
+        }
+
+        // ค้นหาคิวของฉันด้วยเบอร์โทรศัพท์
+        async function searchMyBookings() {
+            const phone = document.getElementById('search-phone').value.trim();
+            const resultsDiv = document.getElementById('search-results');
+            
+            if (phone.length < 9) {
+                resultsDiv.innerHTML = `<p class="text-rose-500 text-center py-3">กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง</p>`;
+                return;
+            }
+
+            resultsDiv.innerHTML = `<p class="text-slate-400 text-center py-4"><i class="fa-solid fa-spinner fa-spin"></i> กำลังค้นหา...</p>`;
+
+            let bookings = [];
+            if (SCRIPT_URL && !SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT")) {
+                try {
+                    const res = await fetch(`${SCRIPT_URL}?action=searchByPhone&phone=${encodeURIComponent(phone)}`);
+                    const data = await res.json();
+                    bookings = data.bookings || [];
+                } catch (e) {
+                    resultsDiv.innerHTML = `<p class="text-rose-500 text-center py-3">เกิดข้อผิดพลาดในการเชื่อมต่อ</p>`;
+                    return;
+                }
+            } else {
+                const localBookings = JSON.parse(localStorage.getItem('kt_bookings') || '[]');
+                bookings = localBookings.filter(b => b.phone === phone);
+            }
+
+            if (bookings.length === 0) {
+                resultsDiv.innerHTML = `<p class="text-slate-500 text-center py-4">ไม่พบประวัติการจองคิวของเบอร์โทรนี้</p>`;
+                return;
+            }
+
+            resultsDiv.innerHTML = bookings.map((b, idx) => {
+                // เตรียมข้อมูลสำหรับปุ่มจองซ้ำและเลื่อนนัด
+                const fullPayload = {
+                    bookingId: b.bookingId,
+                    rowIndex: b.rowIndex || null,
+                    date: b.date || "",
+                    service: b.service,
+                    right: b.right,
+                    fname: b.fname,
+                    lname: b.lname,
+                    phone: phone,
+                    email: b.email || "",
+                    painArea: b.painArea || "",
+                    disease: b.disease || ""
+                };
+                const safeProfile = encodeURIComponent(JSON.stringify(fullPayload));
+                const isCancelled = String(b.status || "").trim() === "ยกเลิก";
+                return `
+                <div class="p-3 rounded-xl border border-slate-200 bg-thaiCream space-y-1.5">
+                    <div class="flex justify-between font-bold text-slate-800">
+                        <span class="text-fbBlue">#${b.bookingId}</span>
+                        <span class="text-thaiGreen-700 bg-thaiGreen-100 px-2 py-0.5 rounded-full text-[10px]">${b.status || 'ยืนยันแล้ว'}</span>
+                    </div>
+                    <p class="font-semibold text-slate-900">${b.thaiDate || b.date} เวลา ${b.time}</p>
+                    <p class="text-slate-600">บริการ: ${b.service}</p>
+                    <p class="text-slate-500">ผู้จอง: ${b.fname} ${b.lname}</p>
+                    <div class="pt-1 grid grid-cols-2 gap-1.5">
+                        <button type="button" ${isCancelled ? "disabled" : ""} onclick="beginReschedule(JSON.parse(decodeURIComponent('${safeProfile}')))" class="${isCancelled ? "bg-slate-200 text-slate-400 cursor-not-allowed" : "bg-amber-500 hover:bg-amber-600 text-white"} font-semibold py-2 rounded-lg text-xs flex items-center justify-center gap-1 transition">
+                            <i class="fa-solid fa-calendar-day"></i> เลื่อนนัด
+                        </button>
+                        <button type="button" onclick="applyProfileAndRebook(JSON.parse(decodeURIComponent('${safeProfile}')))" class="bg-thaiGreen-600 hover:bg-thaiGreen-700 text-white font-semibold py-2 rounded-lg text-xs flex items-center justify-center gap-1 transition">
+                            <i class="fa-solid fa-rotate-right"></i> จองซ้ำ
+                        </button>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        // Helper Functions
+        function formatDateISO(date) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function formatThaiDateFull(dateIso) {
+            if (!dateIso) return "";
+            const [y, m, d] = dateIso.split('-').map(Number);
+            const dateObj = new Date(y, m - 1, d);
+            const days = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
+            return `วัน${days[dateObj.getDay()]}ที่ ${d} ${THAI_MONTHS[m - 1]} ${y + 543}`;
+        }
+
+        function openCheckQueueModal() {
+            document.getElementById('modal-check').classList.remove('hidden');
+        }
+        function closeCheckQueueModal() {
+            document.getElementById('modal-check').classList.add('hidden');
+        }
+        function showAlert(title, message) {
+            document.getElementById('alert-title').textContent = title;
+            document.getElementById('alert-message').textContent = message;
+            document.getElementById('modal-alert').classList.remove('hidden');
+        }
+        function closeAlert() {
+            document.getElementById('modal-alert').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
